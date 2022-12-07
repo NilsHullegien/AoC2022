@@ -26,7 +26,6 @@ for line in lines:
             file = line[1];
             fs[currentDir + '/' + file] = size;
 
-
 directories = {}
 for entry in fs:
     entryDirs = entry.split('/');
@@ -39,8 +38,6 @@ for entry in fs:
         else:
             directories['/'.join(entryDirs)] = fs[entry];
         
-# print(directories);
-
 #7a: 
 print('7a:', sum((filter(lambda elem: elem < 100000, directories.values()))));
 
@@ -51,5 +48,3 @@ if freeSpace < 30000000:
     requiredSpace = 30000000 - freeSpace;
     filteredDir = dict(filter(lambda elem: elem[1] > requiredSpace, directories.items()));
     print('7b:', min(filteredDir.values()))
-
-
