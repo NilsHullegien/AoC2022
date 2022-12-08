@@ -1,4 +1,4 @@
-with open('./example.txt') as f:
+with open('./input.txt') as f:
     lines = [line.strip('\n') for line in f]
 
 lineGrid = [[int(x) for x in line] for line in lines]
@@ -55,31 +55,63 @@ for i, line in enumerate(columns):
     checkReverseVisibleTreesColumn(grid, i, column)
 
 def checkLeft(coord):
-    print("========")
+    # print("========")
     trees = 0
-    for index in range(coord[0], 0, -1):
-        print(coord)
-        print((index, coord[1]), lineGrid[i][j])
-        if grid[(index, coord[1])] < lineGrid[i][j]:
-            trees += 1
-        else:
+    matchingTree = lineGrid[coord[0]][coord[1]]
+    for index in range(coord[1] - 1, -1, -1):
+        trees += 1
+        currentTree = lineGrid[coord[0]][index]
+        if currentTree >= matchingTree:
             break
-    print(coord, trees)
+
+    # print('L', coord, trees)
     return trees
 
-def checkRight(coord, treeVal):
-    return 1
+def checkRight(coord):
+    trees = 0
+    matchingTree = lineGrid[coord[0]][coord[1]]
+    for index in range(coord[1] + 1, len(lineGrid)):
+        trees += 1
+        currentTree = lineGrid[coord[0]][index]
+        if currentTree >= matchingTree:
+            break
 
-def checkUp(coord, treeVal):
-    return 1
+    # print('R', coord, trees)
+    return trees
 
-def checkDown(coord, treeVal):
-    return 1
+def checkUp(coord):
+    trees = 0
+    matchingTree = lineGrid[coord[0]][coord[1]]
+    for index in range(coord[0] - 1, -1, -1):
+        trees += 1
+        currentTree = lineGrid[index][coord[1]]
+        if currentTree >= matchingTree:
+            break
+    # print('U', coord, trees)
+    return trees
+
+def checkDown(coord):
+    trees = 0
+    matchingTree = lineGrid[coord[0]][coord[1]]
+    for index in range(coord[0] + 1, len(lineGrid)):
+        trees += 1
+        currentTree = lineGrid[index][coord[1]]
+        if currentTree >= matchingTree:
+            break
+    # print('D', coord, trees)
+    return trees
 def findBestScore(grid):
     maxScore = 0
     for x in grid:
         # print(x)
-        maxScore = max(maxScore, checkLeft(x) * checkRight(x, grid[x]) * checkUp(x, grid[x]) * checkDown(x, grid[x]))
+        maxScore = max(maxScore,
+                       checkLeft(x)
+                       * checkRight(x)
+                       * checkUp(x)
+                       * checkDown(x)
+                       )
+        if x == (1, 2) or x == (3, 2):
+            print(x, checkUp(x), checkLeft(x), checkRight(x), checkDown(x))
     return maxScore
 
 print(grid)
