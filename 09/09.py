@@ -1,4 +1,4 @@
-with open('./example.txt') as f:
+with open('./input.txt') as f:
     input = [line.strip('\n') for line in f]
     lines = [x.split() for x in input]
 
@@ -25,13 +25,13 @@ def moveTail(newPosHead, tail):
     if distX > 1 or distY > 1:
         # print('match', (newPosHead[0] - tail[0], newPosHead[1] - tail[1]))
         match (newPosHead[0] - tail[0], newPosHead[1] - tail[1]):
-            case (1, 2) | (2, 1):
+            case (1, 2) | (2, 1) | (2, 2):
                 return tail[0] + 1, tail[1] + 1
-            case (-1, 2) | (-2, 1):
+            case (-1, 2) | (-2, 1)| (-2, 2):
                 return tail[0] - 1, tail[1] + 1
-            case (1, -2) | (2, -1):
+            case (1, -2) | (2, -1) | (2, -2):
                 return tail[0] + 1, tail[1] - 1
-            case (-1, -2) | (-2, -1):
+            case (-1, -2) | (-2, -1) | (-2, -2):
                 return tail[0] - 1, tail[1] - 1
             case (0, 2):
                 return tail[0], tail[1] + 1
@@ -75,6 +75,7 @@ def b():
                 if rope[i] == new:
                     break
                 rope[i] = new
+                print(i, rope)
             uniqueCoords.add(rope[9])
             print(rope)
             print('===================')
