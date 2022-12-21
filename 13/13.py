@@ -1,62 +1,54 @@
 import json
 
 
-def comPairs(leftHead, leftTail, rightHead, rightTail):
-    print(leftHead, leftTail, rightHead, rightTail)
-    match leftHead, rightHead:
-        case None, None:
-            return True
-        case None, _:
-            return True
-        case _, None:
-            return False
+def comPairs(left, right):
+    print('comPairs:', left, right)
+    match left, right:
         case int(), int():
-            print('ints:', leftHead, leftTail, rightHead, rightTail)
-            if leftHead > rightHead:
+            print('ints:', left, right)
+            if left > right:
                 return False
-            if leftHead < rightHead:
+            if left < right:
                 return True
-            if leftTail == rightTail:
-                return True
-            if len(leftTail) == 0:
-                return False
-            if len(rightTail) == 0:
-                return True
-            return comPairs(leftTail[0], leftTail[1:], rightTail[0], rightTail[1:])
+            if left == right:
+                return None
         case list(), int():
             print('list item')
-            return comPairs(leftHead, leftTail, [rightHead], rightTail)
+            return comPairs(left, [right])
         case int(), list():
             print('item list')
-            return comPairs([leftHead], leftTail, rightHead, rightTail)
+            return comPairs([left], right)
         case list(), list():
-            if comPairs(leftHead[0], leftHead[1:], rightHead[0], rightHead[1:]):
-                if leftTail == rightTail:
-                    return True
-                if len(leftTail) == 0:
-                    return False
-                if len(rightTail) == 0:
-                    return True
-                return comPairs(leftTail[0], leftTail[1:], rightTail[0], rightTail[1:])
-            return False
+            if len(left) == 0 and len(right) == 0:
+                return None
+            if len(left) == 0:
+                return True
+            if len(right) == 0:
+                return False
+            compareRest = comPairs(left[0], right[0])
+            if compareRest == False or compareRest == True:
+                return compareRest
+
+            return comPairs(left[1:], right[1:])
         case _:
             raise Exception('WHAT HAPPENED HERE?!', leftHead, leftTail, rightHead, rightTail)
     return False
 
 
 if __name__ == '__main__':
-    with open('./example.txt') as f:
+    with open('./input.txt') as f:
         lines = f.read()
         pairs = [[json.loads(y) for y in x.split('\n')] for x in lines.split('\n\n')]
         print(pairs)
 
-        totalCorrect = 0
+        totalCorrect = []
         for idx, pair in enumerate(pairs):
             left = pair[0]
             right = pair[1]
-            print('PAIR CHECKING:', left, right)
-            if comPairs(left[0], left[1:], right[0], right[1:]):
+            print('=======PAIR CHECKING: [', (1 + idx), ']', left, right, '=======')
+            if comPairs(left, right):
                 print('CORRECT PAIR: ', (1 + idx))
-                totalCorrect += (1 + idx)
+                totalCorrect.append(1 + idx)
 
         print(totalCorrect)
+        print(sum(totalCorrect))
