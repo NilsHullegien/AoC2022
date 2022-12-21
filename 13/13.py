@@ -1,4 +1,5 @@
 import json
+from functools import cmp_to_key
 
 
 def comPairs(left, right):
@@ -31,24 +32,37 @@ def comPairs(left, right):
 
             return comPairs(left[1:], right[1:])
         case _:
-            raise Exception('WHAT HAPPENED HERE?!', leftHead, leftTail, rightHead, rightTail)
+            raise Exception('WHAT HAPPENED HERE?!', left, right)
     return False
+
+
+def a(pairs):
+    totalCorrect = []
+    for idx, pair in enumerate(pairs):
+        left = pair[0]
+        right = pair[1]
+        print('=======PAIR CHECKING: [', (1 + idx), ']', left, right, '=======')
+        if comPairs(left, right):
+            print('CORRECT PAIR: ', (1 + idx))
+            totalCorrect.append(1 + idx)
+
+    print('13a:', sum(totalCorrect))
+
+
+def b(allPackets):
+    allPackets.sort(key=cmp_to_key(lambda x, y: -1 if comPairs(x, y) else 1))
+    print(allPackets)
+    print('13b:', (allPackets.index(json.loads('[[2]]'))+1) * (allPackets.index(json.loads('[[6]]'))+1))
 
 
 if __name__ == '__main__':
     with open('./input.txt') as f:
         lines = f.read()
         pairs = [[json.loads(y) for y in x.split('\n')] for x in lines.split('\n\n')]
-        print(pairs)
-
-        totalCorrect = []
-        for idx, pair in enumerate(pairs):
-            left = pair[0]
-            right = pair[1]
-            print('=======PAIR CHECKING: [', (1 + idx), ']', left, right, '=======')
-            if comPairs(left, right):
-                print('CORRECT PAIR: ', (1 + idx))
-                totalCorrect.append(1 + idx)
-
-        print(totalCorrect)
-        print(sum(totalCorrect))
+        allPackets = [item for sublist in pairs for item in sublist]
+        allPackets.append(json.loads('[[2]]'))
+        allPackets.append(json.loads('[[6]]'))
+        print(allPackets)
+        a = []
+        # a(pairs)
+        b(allPackets)
